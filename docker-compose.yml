@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  ruadois-api:
+    container_name: ruadois-api
+    build: .
+    volumes:
+      - ./:/api/
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ruadois}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ruadois}
+      POSTGRES_DB: ${POSTGRES_DB:-ruadois}
+      POSTGRES_HOST: ${POSTGRES_HOST:-ruadois-postgres}
+    depends_on:
+      - ruadois-postgres
+    ports:
+      - 3000:3000
+    networks:
+      - ruadois
+
+  ruadois-postgres:
+    image: postgres:11.4
+    container_name: ruadois-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ruadois}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ruadois}
+      POSTGRES_DB: ${POSTGRES_DB:-ruadois}
+    networks:
+      - ruadois
+    ports:
+      - 5432:5432
+
+networks:
+  ruadois:
